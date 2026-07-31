@@ -1,13 +1,14 @@
 {
   "name": "solguard-agent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "A human-approved Solana treasury guard skill for ZeroClaw.",
   "type": "module",
   "scripts": {
     "start": "node src/cli.js",
     "test": "node --test",
-    "check": "node src/cli.js check"
+    "check": "node src/cli.js check",
+    "monitor": "node src/monitor.js"
   },
   "engines": { "node": ">=20" }
 }
