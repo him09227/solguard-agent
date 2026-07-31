@@ -21,6 +21,21 @@ export async function getSignatures(address, limit = 5) {
   return rpc("getSignaturesForAddress", [address, { limit }]);
 }
 
+export async function verifyTransaction(signature) {
+  const result = await rpc("getSignatureStatuses", [[signature], { searchTransactionHistory: true }]);
+  const status = result?.value?.[0] ?? null;
+  if (!status) return { found: false, signature, verified: false, explorer: explorerTx(signature) };
+  return {
+    found: true,
+    signature,
+    verified: status.err === null && ["confirmed", "finalized"].includes(status.confirmationStatus),
+    confirmationStatus: status.confirmationStatus,
+    slot: status.slot,
+    error: status.err,
+    explorer: explorerTx(signature)
+  };
+}
+
 export function explorerTx(signature) {
   const cluster = RPC_URL.includes("devnet") ? "?cluster=devnet" : RPC_URL.includes("testnet") ? "?cluster=testnet" : "";
   return `https://explorer.solana.com/tx/${signature}${cluster}`;
